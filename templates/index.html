@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart PDF Q&A Chatbot - AI Powered</title>
+
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Marked.js for Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- TailwindCSS Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B5CF6',
+                        secondary: '#EC4899',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-blue-900 min-h-screen transition-colors duration-300">
+
+    <!-- Header -->
+    <header class="glass-card border-b border-white/20 dark:border-gray-700/30 sticky top-0 z-50 backdrop-blur-xl">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3 animate-slide-up">
+                    <div
+                        class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                        <i data-lucide="brain" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1
+                            class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                            Smart PDF Q&A
+                        </h1>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">AI-Powered Assistant</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-4">
+                    <button onclick="switchTab('home')" id="tab-home" class="nav-btn active">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        <span>Home</span>
+                    </button>
+                    <button onclick="switchTab('chat')" id="tab-chat" class="nav-btn">
+                        <i data-lucide="message-circle" class="w-4 h-4"></i>
+                        <span>Chat</span>
+                    </button>
+                    <button onclick="switchTab('insights')" id="tab-insights" class="nav-btn">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        <span>Insights</span>
+                    </button>
+                </nav>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()"
+                    class="p-2 rounded-xl glass-card hover:scale-110 transition-transform duration-200">
+                    <i data-lucide="moon" id="theme-icon" class="w-5 h-5 text-gray-700 dark:text-gray-300"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-8">
+
+        <!-- Home Page -->
+        <div id="page-home" class="page-content active">
+            <div class="text-center max-w-4xl mx-auto space-y-8 animate-fade-in">
+                <div class="space-y-4">
+                    <h2
+                        class="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 dark:from-purple-400 dark:via-pink-400 dark:to-blue-400 bg-clip-text text-transparent">
+                        Transform PDFs into Conversations
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300">
+                        Upload your documents and get instant AI-powered answers with citation sources
+                    </p>
+                </div>
+
+                <!-- Quote Banner -->
+                <div class="glass-card p-6 rounded-2xl border border-purple-200/50 dark:border-purple-500/30 animate-slide-up"
+                    style="animation-delay: 0.2s">
+                    <div class="flex items-center justify-center space-x-3 mb-3">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-purple-500"></i>
+                        <span class="text-sm font-semibold text-purple-600 dark:text-purple-400">AI INSIGHT</span>
+                    </div>
+                    <p id="quote-text" class="text-lg italic text-gray-700 dark:text-gray-300">
+                        "Knowledge is power. Information is liberating."
+                    </p>
+                </div>
+
+                <!-- CTA Button -->
+                <button onclick="switchTab('chat')" class="btn-primary text-lg px-8 py-4 animate-slide-up"
+                    style="animation-delay: 0.4s">
+                    <i data-lucide="rocket" class="w-5 h-5"></i>
+                    <span>Get Started</span>
+                </button>
+
+                <!-- Features Grid -->
+                <div class="grid md:grid-cols-3 gap-6 mt-12 animate-slide-up" style="animation-delay: 0.6s">
+                    <div class="glass-card p-6 rounded-2xl hover:scale-105 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+                            <i data-lucide="zap" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Lightning Fast</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Powered by Groq's ultra-fast inference
+                            engine</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl hover:scale-105 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-pink-500/20 rounded-xl flex items-center justify-center mb-4">
+                            <i data-lucide="book-open" class="w-6 h-6 text-pink-600 dark:text-pink-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Smart Context</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">RAG-based system with source citations</p>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-2xl hover:scale-105 transition-transform duration-300">
+                        <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-2">Secure & Private</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Your documents are processed locally</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Page -->
+        <div id="page-chat" class="page-content">
+            <div class="grid lg:grid-cols-12 gap-6 h-[calc(100vh-180px)]">
+
+                <!-- Sidebar -->
+                <aside class="lg:col-span-3 space-y-4">
+                    <div class="glass-card rounded-2xl p-6 h-full flex flex-col">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                            <i data-lucide="folder" class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400"></i>
+                            Documents
+                        </h3>
+
+                        <!-- Upload Area -->
+                        <div class="mb-4">
+                            <label class="btn-primary cursor-pointer w-full">
+                                <i data-lucide="upload" class="w-4 h-4"></i>
+                                <span>Upload PDF</span>
+                                <input type="file" id="pdfFile" accept=".pdf" class="hidden" onchange="uploadPDF()">
+                            </label>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div id="upload-progress" class="hidden mb-4">
+                            <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <div class="progress-bar h-full bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">Uploading...</p>
+                        </div>
+
+                        <!-- PDF List -->
+                        <div id="pdf-list" class="flex-1 overflow-y-auto space-y-2">
+                            <p class="text-sm text-gray-500 dark:text-gray-400 italic">No documents uploaded yet</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Chat Area -->
+                <div class="lg:col-span-6 flex flex-col">
+                    <div class="glass-card rounded-2xl flex flex-col h-full">
+                        <!-- Chat Header -->
+                        <div
+                            class="p-4 border-b border-gray-200/50 dark:border-gray-700/50 flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                                    <i data-lucide="bot" class="w-6 h-6 text-white"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-gray-800 dark:text-gray-200">AI Assistant</h3>
+                                    <p class="text-xs text-green-600 dark:text-green-400 flex items-center">
+                                        <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                                        Online
+                                    </p>
+                                </div>
+                            </div>
+                            <button onclick="clearChat()"
+                                class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4 text-gray-600 dark:text-gray-400"></i>
+                            </button>
+                        </div>
+
+                        <!-- Messages -->
+                        <div id="chatBox" class="flex-1 overflow-y-auto p-6 space-y-4">
+                            <div class="text-center text-gray-500 dark:text-gray-400 py-12">
+                                <i data-lucide="message-square" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                                <p>Upload a PDF and start asking questions!</p>
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="p-4 border-t border-gray-200/50 dark:border-gray-700/50">
+                            <div class="flex items-center space-x-2">
+                                <button id="voice-btn" onclick="startVoiceInput()"
+                                    class="p-3 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-xl transition-colors">
+                                    <i data-lucide="mic" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                                </button>
+                                <input id="question" type="text" placeholder="Ask anything about your document..."
+                                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-800 border-0 rounded-xl focus:ring-2 focus:ring-purple-500 dark:text-white"
+                                    onkeypress="handleKeyPress(event)" />
+                                <button onclick="askQuestion()" class="btn-primary">
+                                    <i data-lucide="send" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Insights Panel -->
+                <aside class="lg:col-span-3 space-y-4">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400"></i>
+                            Insights
+                        </h3>
+
+                        <!-- Stats -->
+                        <div class="space-y-4">
+                            <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-600 dark:text-gray-400">Model</span>
+                                    <i data-lucide="cpu" class="w-3 h-3 text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <p class="text-sm font-bold text-gray-800 dark:text-gray-200" id="model-name">
+                                    llama-3.1-8b</p>
+                            </div>
+
+                            <div class="p-3 bg-pink-50 dark:bg-pink-900/20 rounded-xl">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-600 dark:text-gray-400">Documents</span>
+                                    <i data-lucide="file-text" class="w-3 h-3 text-pink-600 dark:text-pink-400"></i>
+                                </div>
+                                <p class="text-sm font-bold text-gray-800 dark:text-gray-200" id="doc-count">0</p>
+                            </div>
+
+                            <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs text-gray-600 dark:text-gray-400">Last Response</span>
+                                    <i data-lucide="clock" class="w-3 h-3 text-blue-600 dark:text-blue-400"></i>
+                                </div>
+                                <p class="text-sm font-bold text-gray-800 dark:text-gray-200" id="last-latency">—</p>
+                            </div>
+                        </div>
+
+                        <!-- Sources -->
+                        <div class="mt-6">
+                            <h4 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Sources Used</h4>
+                            <div id="sources-list" class="space-y-2 text-xs text-gray-600 dark:text-gray-400">
+                                <p class="italic">Ask a question to see sources</p>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+        <!-- Insights Page -->
+        <div id="page-insights" class="page-content">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-6">Analytics & Insights</h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">System Status</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Status</span>
+                                <span class="text-green-600 dark:text-green-400 font-bold">● Active</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Model</span>
+                                <span
+                                    class="font-mono text-sm text-gray-800 dark:text-gray-200">llama-3.1-8b-instant</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Embedding</span>
+                                <span class="font-mono text-sm text-gray-800 dark:text-gray-200">HuggingFace</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="font-bold text-gray-800 dark:text-gray-200 mb-4">Performance</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Avg Response Time</span>
+                                <span class="font-bold text-gray-800 dark:text-gray-200">1.2s</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Total Queries</span>
+                                <span class="font-bold text-gray-800 dark:text-gray-200" id="total-queries">0</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600 dark:text-gray-400">Success Rate</span>
+                                <span class="font-bold text-green-600 dark:text-green-400">100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="/static/script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

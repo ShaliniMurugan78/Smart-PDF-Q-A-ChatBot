@@ -1,0 +1,431 @@
+/* ============================================
+   GLOBAL STYLES & VARIABLES
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.dark {
+    --glass-bg: rgba(17, 24, 39, 0.7);
+    --glass-border: rgba(75, 85, 99, 0.3);
+    --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn-primary {
+    @apply px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-medium;
+    @apply hover:from-purple-700 hover:to-pink-700 transition-all duration-300;
+    @apply flex items-center justify-center space-x-2;
+    @apply shadow-lg hover:shadow-xl hover:scale-105 active:scale-95;
+}
+
+.nav-btn {
+    @apply px-4 py-2 rounded-xl flex items-center space-x-2 text-sm font-medium;
+    @apply text-gray-600 dark:text-gray-400;
+    @apply hover:bg-white/50 dark:hover:bg-gray-800/50 transition-all duration-200;
+}
+
+.nav-btn.active {
+    @apply bg-white dark:bg-gray-800 text-purple-600 dark:text-purple-400;
+    @apply shadow-md;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bubblePop {
+    0% {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes typingDots {
+    0%, 20% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+@keyframes progress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+}
+
+.animate-slide-down {
+    animation: slideDown 0.6s ease-out;
+}
+
+.animate-bubble-pop {
+    animation: bubblePop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* ============================================
+   CHAT MESSAGES
+   ============================================ */
+
+.message {
+    display: flex;
+    margin-bottom: 1rem;
+    animation: bubblePop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+.message-bubble {
+    max-width: 70%;
+    padding: 0.875rem 1.125rem;
+    border-radius: 1.25rem;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.message.user .message-bubble {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.message.bot .message-bubble {
+    @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200;
+    @apply border border-gray-200 dark:border-gray-700;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.message-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem;
+    flex-shrink: 0;
+}
+
+.message.user .message-avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    order: 2;
+}
+
+.message.bot .message-avatar {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    order: 1;
+}
+
+.message-timestamp {
+    font-size: 0.7rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+.message.user .message-timestamp {
+    text-align: right;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1.125rem;
+    @apply bg-white dark:bg-gray-800;
+    border-radius: 1.25rem;
+    border-bottom-left-radius: 0.25rem;
+    max-width: 4rem;
+}
+
+.typing-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    @apply bg-gray-400 dark:bg-gray-600;
+    margin: 0 0.125rem;
+    animation: typingDots 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.progress-bar {
+    animation: progress 2s ease-in-out;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ============================================
+   PAGE TRANSITIONS
+   ============================================ */
+
+.page-content {
+    display: none;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.page-content.active {
+    display: block;
+}
+
+/* ============================================
+   PDF LIST ITEMS
+   ============================================ */
+
+.pdf-item {
+    @apply p-3 rounded-xl bg-white/50 dark:bg-gray-800/50;
+    @apply border border-gray-200/50 dark:border-gray-700/50;
+    @apply hover:bg-white dark:hover:bg-gray-800;
+    @apply transition-all duration-200 cursor-pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideDown 0.3s ease-out;
+}
+
+.pdf-item:hover {
+    @apply shadow-md scale-105;
+}
+
+.pdf-item .pdf-name {
+    @apply text-sm font-medium text-gray-700 dark:text-gray-300;
+    @apply truncate flex-1;
+}
+
+.pdf-item .delete-btn {
+    @apply p-1 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30;
+    @apply text-red-600 dark:text-red-400 transition-colors;
+}
+
+/* ============================================
+   COPY BUTTON
+   ============================================ */
+
+.copy-btn {
+    @apply p-1 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700;
+    @apply text-gray-600 dark:text-gray-400 transition-colors;
+    @apply cursor-pointer inline-flex items-center justify-center;
+    font-size: 0.75rem;
+}
+
+.copy-btn:active {
+    @apply scale-95;
+}
+
+/* ============================================
+   SOURCE BADGES
+   ============================================ */
+
+.source-badge {
+    @apply inline-flex items-center space-x-1 px-2 py-1 rounded-lg text-xs;
+    @apply bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300;
+    @apply border border-purple-200 dark:border-purple-700;
+    margin-right: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+/* ============================================
+   VOICE RECORDING
+   ============================================ */
+
+.voice-recording {
+    @apply bg-red-500 text-white;
+    animation: pulse 1s infinite;
+}
+
+/* ============================================
+   MARKDOWN CONTENT
+   ============================================ */
+
+.markdown-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    @apply font-bold mb-2 text-gray-800 dark:text-gray-200;
+}
+
+.markdown-content h1 { font-size: 1.5rem; }
+.markdown-content h2 { font-size: 1.25rem; }
+.markdown-content h3 { font-size: 1.1rem; }
+
+.markdown-content p {
+    @apply mb-3;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    @apply ml-5 mb-3;
+}
+
+.markdown-content code {
+    @apply bg-gray-200 dark:bg-gray-700 px-1 rounded text-sm;
+    @apply text-purple-600 dark:text-purple-400;
+}
+
+.markdown-content pre {
+    @apply bg-gray-800 dark:bg-gray-900 text-gray-100 p-3 rounded-lg mb-3 overflow-x-auto;
+}
+
+.markdown-content pre code {
+    @apply bg-transparent text-gray-100;
+}
+
+.markdown-content a {
+    @apply text-purple-600 dark:text-purple-400 hover:underline;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+    .lg\:col-span-3,
+    .lg\:col-span-6 {
+        grid-column: span 12;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.gradient-text {
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent;
+}
+
+.success-checkmark {
+    color: #10b981;
+    animation: bubblePop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
