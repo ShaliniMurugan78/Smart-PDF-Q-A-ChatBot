@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 import os
+import uuid
 
 from config import UPLOAD_FOLDER
 from rag.qa_chain import setup_rag, ask_question
@@ -10,6 +12,8 @@ from rag.qa_chain import setup_rag, ask_question
 # --------------------------------------------------
 
 app = Flask(__name__)
+CORS(app)  # allow cross-origin requests (important for cloud)
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # create uploads folder if not exists
@@ -22,9 +26,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route("/")
 def home():
-    """
-    Render UI page
-    """
+    """Render UI page"""
     return render_template("index.html")
 
 
@@ -47,14 +49,16 @@ def upload_pdf():
         if file.filename == "":
             return jsonify({"error": "Empty filename"}), 400
 
-        if not file.filename.endswith(".pdf"):
+        if not file.filename.lower().endswith(".pdf"):
             return jsonify({"error": "Only PDF files allowed"}), 400
 
-        # save file
-        file_path = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
+        # ---- unique filename (important for cloud/multiple users)
+        unique_name = f"{uuid.uuid4()}_{file.filename}"
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"], unique_name)
+
         file.save(file_path)
 
-        # setup RAG pipeline
+        # ---- build RAG pipeline
         setup_rag(file_path)
 
         return jsonify({
@@ -62,10 +66,8 @@ def upload_pdf():
         })
 
     except Exception as e:
-        print(f"Error uploading PDF: {e}")
-        return jsonify({
-            "error": str(e)
-        }), 500
+        print(f"[UPLOAD ERROR] {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 # --------------------------------------------------
@@ -74,13 +76,10 @@ def upload_pdf():
 
 @app.route("/ask", methods=["POST"])
 def ask():
-    """
-    Ask question to chatbot
-    """
+    """Ask question to chatbot"""
 
     try:
-        data = request.get_json()
-
+        data = request.get_json() or {}  # safer
         question = data.get("question")
 
         if not question:
@@ -88,23 +87,28 @@ def ask():
 
         answer = ask_question(question)
 
-        return jsonify({
-            "answer": answer
-        })
+        return jsonify({"answer": answer})
 
     except Exception as e:
-        print(f"Error processing question: {e}")
-        return jsonify({
-            "error": str(e)
-        }), 500
+        print(f"[ASK ERROR] {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 # --------------------------------------------------
-# Run Server
+# Health Check (optional but good for hosting)
+# --------------------------------------------------
+
+@app.route("/health")
+def health():
+    return jsonify({"status": "ok"})
+
+
+# --------------------------------------------------
+# Run Server (local only)
 # --------------------------------------------------
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 7860))
     app.run(
         host="0.0.0.0",
         port=port,
