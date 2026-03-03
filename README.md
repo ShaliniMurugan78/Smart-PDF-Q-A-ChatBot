@@ -3,8 +3,8 @@ I developed a Smart AI PDF Q&A Chatbot using a modular Retrieval-Augmented Gener
 The pipeline begins by extracting and splitting PDF content into manageable chunks. These chunks are converted into vector embeddings and stored in a vector database to enable efficient semantic search. When a user submits a query, the retriever identifies the most relevant document segments, which are then passed to a Large Language Model via the Groq Cloud API to generate accurate, context-aware responses.
 
 The QA chain functions as the orchestration layer, coordinating retrieval and LLM interaction to ensure responses are grounded in the uploaded document. This modular design improves maintainability, scalability, and performance while enabling fast and reliable document-based question answering.
-
-###Architecture
+---
+### Architecture
 
 The project follows a modular RAG pipeline:
 
@@ -20,7 +20,9 @@ Retriever – Retrieves relevant chunks based on user query
 
 QA Chain – Combines retrieved context with user query and generates answer using Groq LLM
 
-###Tech Stack
+---
+
+### Tech Stack
 
 Python
 
@@ -36,7 +38,9 @@ Embeddings Model
 
 LangChain
 
-###How It Works
+---
+
+### How It Works
 
 User uploads a PDF document
 
